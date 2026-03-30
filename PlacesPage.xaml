@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="bp360_admin_panel.PlacesPage"
+             Title="">
+    <VerticalStackLayout>
+        <VerticalStackLayout
+            Padding="0,20"
+            Spacing="25">
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                <Button x:Name="GetPlaces" Text="Helyek lekérése" Clicked="GetPlaces_Clicked" />
+                <Button x:Name="AddPlace" Text="Hely hozzáadása" Clicked="AddPlace_Clicked" />
+                <Button x:Name="UpdatePlace" Text="Hely frissítése" Clicked="UpdatePlace_Clicked"/>
+                <Button x:Name="DeletePlace" Text="Hely törlése" Clicked="DeletePlace_Clicked"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>

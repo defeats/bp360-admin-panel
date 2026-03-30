@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="bp360_admin_panel.UsersPage"
+             Title="">
+    <VerticalStackLayout>
+        <VerticalStackLayout
+            Padding="0,20"
+            Spacing="25">
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                <Button Text="Felhasználók lekérése" Clicked="GetUsers_Clicked" />
+                <Button Text="Felhasználó hozzáadása" Clicked="AddUser_Clicked" />
+                <Button Text="Felhasználó frissítése" Clicked="UpdateUser_Clicked"/>
+                <Button Text="Felhasználó törlése" Clicked="DeleteUser_Clicked"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>
