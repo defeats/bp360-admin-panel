@@ -42,7 +42,7 @@ public partial class LoginPage : ContentPage
 
                 if (data.user.role != "admin")
                 {
-                    await DisplayAlertAsync("Hiba", "Nincs admin jogosultságod!", "OK");
+                    await DisplayAlertAsync("Hiba", "Nincs admin jogosultságod", "OK");
                     return;
                 } else
                 {

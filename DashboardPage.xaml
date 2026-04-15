@@ -6,6 +6,9 @@
 
     <VerticalStackLayout HorizontalOptions="Center">
         <Label Text="Üdv az Admin felületen!" />
+        <Label x:Name="UsersInDb" Text="A felhasználók száma a nyílvántartásban: "/>
+        <Label x:Name="PlacesInDb" Text="A helyek száma a nyílvántartásban: "/>
+        <Label x:Name="ReviewsInDb" Text="A vélemények száma a nyílvántartásban: "/>
         <Button x:Name="Logout" Text="Kijelentkezés" Clicked="Logout_Clicked"/>
     </VerticalStackLayout>
 </ContentPage>
