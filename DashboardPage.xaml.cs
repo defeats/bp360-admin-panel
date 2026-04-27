@@ -20,24 +20,26 @@ public partial class DashboardPage : ContentPage
 
     protected override async void OnAppearing()
     {
+        PlacesInDb.Text = "Helyek száma az adatbázisban: ";
+        ReviewsInDb.Text = "Értékelések száma az adatbázisban: ";
+        UsersInDb.Text = "Felhasználók száma az adatbázisban: ";
         base.OnAppearing();
-        PlacesInDb.Text = "A helyek száma a nyílvántartásban: ";
         try
         {
             HttpResponseMessage placeResponse = await client.GetAsync("http://localhost:8000/api/places");
-            if (placeResponse.IsSuccessStatusCode)
-            {
-                var jsonResponse = await placeResponse.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<PlaceResponse>(jsonResponse);
-                if (data?.places != null)
+                if (placeResponse.IsSuccessStatusCode)
                 {
-                    PlacesInDb.Text += data.places.Count.ToString();
-                } else PlacesInDb.Text += "0";
-            }
-            else
-            {
-                await DisplayAlertAsync("Hiba", "HttpResponse hiba: " + placeResponse.StatusCode, "OK");
-            }
+                    var jsonResponse = await placeResponse.Content.ReadAsStringAsync();
+                    var data = JsonConvert.DeserializeObject<PlaceResponse>(jsonResponse);
+                    if (data?.places != null)
+                    {
+                        PlacesInDb.Text += data.places.Count.ToString();
+                    } else PlacesInDb.Text += "0";
+                }
+                else
+                {
+                    await DisplayAlertAsync("Hiba", "HttpResponse hiba: " + placeResponse.StatusCode, "OK");
+                }
         }
         catch (Exception ex)
         {

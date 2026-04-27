@@ -7,6 +7,11 @@
     Title="bp360_admin_panel">
 
     <ShellContent
+        Title="Loading"
+        ContentTemplate="{DataTemplate local:LoadingPage}"
+        Route="loading" />
+    
+    <ShellContent
         Title="Login"
         ContentTemplate="{DataTemplate local:LoginPage}"
         Route="login" />

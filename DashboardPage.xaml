@@ -4,11 +4,18 @@
              x:Class="bp360_admin_panel.DashboardPage"
              Title="">
 
-    <VerticalStackLayout HorizontalOptions="Center">
-        <Label Text="Üdv az Admin felületen!" />
-        <Label x:Name="UsersInDb" Text="A felhasználók száma a nyílvántartásban: "/>
-        <Label x:Name="PlacesInDb" Text="A helyek száma a nyílvántartásban: "/>
-        <Label x:Name="ReviewsInDb" Text="A vélemények száma a nyílvántartásban: "/>
-        <Button x:Name="Logout" Text="Kijelentkezés" Clicked="Logout_Clicked"/>
+    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+        <Label Text="Üdv az Admin felületen!" FontAttributes="Bold" FontSize="18" />
+        <Label x:Name="UsersInDb"/>
+        <Label x:Name="PlacesInDb"/>
+        <Label x:Name="ReviewsInDb"/>
+
+        <Button x:Name="Logout" 
+            Text="Kijelentkezés" 
+            Clicked="Logout_Clicked" 
+            BackgroundColor="{StaticResource bp360Button}" 
+            TextColor="White"
+            FontAttributes="Bold"
+            Margin="0,10,0,0"/>
     </VerticalStackLayout>
 </ContentPage>

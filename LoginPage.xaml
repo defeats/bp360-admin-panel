@@ -15,7 +15,7 @@
             Text="Admin belépés"
             FontSize="28"
             FontAttributes="Bold"
-            TextColor="#ff9500"
+            TextColor="{StaticResource bp360}"
             HorizontalOptions="Center"
             Margin="0,0,0,10" />
 
@@ -34,7 +34,7 @@
             Text="Bejelentkezés" 
             Clicked="LoginButton_Clicked" 
             WidthRequest="300" 
-            BackgroundColor="#ffaa33"
+            BackgroundColor="{StaticResource bp360Button}"
             TextColor="White" />
 
     </VerticalStackLayout>
