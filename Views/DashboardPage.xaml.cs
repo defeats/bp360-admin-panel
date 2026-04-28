@@ -1,50 +1,58 @@
 namespace bp360_admin_panel;
+using bp360_admin_panel.Models;
+using bp360_admin_panel.Services;
+using Newtonsoft.Json;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Net;
-using Newtonsoft.Json;
-using bp360_admin_panel.Models;
 
 public partial class DashboardPage : ContentPage
 {
-    private HttpClient client;
-    private HttpClientHandler handler;
     public DashboardPage()
 	{
 		InitializeComponent();
-        handler = new HttpClientHandler
-        {
-            CookieContainer = new CookieContainer()
-        };
-        client = new HttpClient(handler);
 	}
 
     protected override async void OnAppearing()
     {
+        base.OnAppearing();
+
         PlacesInDb.Text = "Helyek száma az adatbázisban: ";
         ReviewsInDb.Text = "Értékelések száma az adatbázisban: ";
         UsersInDb.Text = "Felhasználók száma az adatbázisban: ";
-        base.OnAppearing();
+
+        await LoadStatistics();
+    }
+
+    private async Task LoadStatistics()
+    {
         try
         {
-            HttpResponseMessage placeResponse = await client.GetAsync("http://localhost:8000/api/places");
-                if (placeResponse.IsSuccessStatusCode)
+            HttpResponseMessage placesRes = await ApiService.Client.GetAsync("places");
+            HttpResponseMessage usersRes = await ApiService.Client.GetAsync("users");
+
+            if (placesRes.IsSuccessStatusCode && usersRes.IsSuccessStatusCode)
+            {
+                var placesJsonRes = await placesRes.Content.ReadAsStringAsync();
+                var placesData = JsonConvert.DeserializeObject<PlaceResponse>(placesJsonRes);
+
+                var usersJsonRes = await usersRes.Content.ReadAsStringAsync();
+                var usersData = JsonConvert.DeserializeObject<UserResponse>(usersJsonRes);
+
+                if (placesData?.places != null && usersData?.users != null)
                 {
-                    var jsonResponse = await placeResponse.Content.ReadAsStringAsync();
-                    var data = JsonConvert.DeserializeObject<PlaceResponse>(jsonResponse);
-                    if (data?.places != null)
-                    {
-                        PlacesInDb.Text += data.places.Count.ToString();
-                    } else PlacesInDb.Text += "0";
+                    PlacesInDb.Text += placesData.places.Count.ToString();
+                    UsersInDb.Text += usersData.users.Count.ToString();
+                    //TODO: Reviews statistics
                 }
-                else
-                {
-                    await DisplayAlertAsync("Hiba", "HttpResponse hiba: " + placeResponse.StatusCode, "OK");
-                }
+
+                else PlacesInDb.Text += "0"; UsersInDb.Text += "0";
+            }
+
         }
         catch (Exception ex)
         {
-            await DisplayAlertAsync("Hiba", "Lekérési hiba: " + ex.Message, "OK");
+            await DisplayAlertAsync("Hiba", "Hálózati hiba: " + ex.Message, "OK");
         }
     }
 
@@ -55,6 +63,7 @@ public partial class DashboardPage : ContentPage
         if (answer)
         {
             SecureStorage.Default.Remove("token");
+            ApiService.SetAuthToken(null);
             await Shell.Current.GoToAsync("//login");
         }
     }

@@ -1,4 +1,5 @@
 using bp360_admin_panel.Helpers;
+using bp360_admin_panel.Services;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 
@@ -30,11 +31,8 @@ public partial class LoadingPage : ContentPage
                 return;
             }
 
-            using var client = new HttpClient();
-            client.DefaultRequestHeaders.Add("Accept", "application/json");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            HttpResponseMessage res = await client.GetAsync("http://localhost:8000/api/checkTokenExpiryDate");
+            ApiService.SetAuthToken(token);
+            HttpResponseMessage res = await ApiService.Client.GetAsync("checkTokenExpiryDate");
 
             if (res.IsSuccessStatusCode)
             {
@@ -61,14 +59,19 @@ public partial class LoadingPage : ContentPage
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlertAsync("Hiba", "Nem sikerült kapcsolódni a szerverhez: " + ex.Message, "OK");
-            return;
+            await Shell.Current.DisplayAlertAsync("Hiba", "Hálózati hiba: " + ex.Message, "OK");
+            if (Application.Current != null)
+            {
+                Application.Current.Quit();
+            }
         }
     }
 
     private async Task HandleExpiredSession(string? message)
     {
         SecureStorage.Default.Remove("token");
+        ApiService.SetAuthToken(null);
+
         if (!string.IsNullOrEmpty(message))
         {
             await Shell.Current.DisplayAlertAsync("Figyelem", message, "OK");

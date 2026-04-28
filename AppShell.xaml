@@ -18,6 +18,7 @@
         <ShellContent Title="Adatok" ContentTemplate="{DataTemplate local:DashboardPage}" />
         <ShellContent Title="Helyek" ContentTemplate="{DataTemplate local:PlacesPage}" />
         <ShellContent Title="Felhasználók" ContentTemplate="{DataTemplate local:UsersPage}" />
+        <ShellContent Title="Vélemények" ContentTemplate="{DataTemplate local:ReviewsPage}" />
     </TabBar>
 
     <TabBar>

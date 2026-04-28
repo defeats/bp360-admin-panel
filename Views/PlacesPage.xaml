@@ -35,7 +35,7 @@
                         <VerticalStackLayout>
                             <Label>
                                 <Label.Text>
-                                    <MultiBinding StringFormat="{}{0} | ID: {1} | slug: {2} | {3} views">
+                                    <MultiBinding StringFormat="{}{0} | ID: {1} | slug: {2} | {3} megtekintés">
                                         <Binding Path="name" />
                                         <Binding Path="id" />
                                         <Binding Path="slug" />

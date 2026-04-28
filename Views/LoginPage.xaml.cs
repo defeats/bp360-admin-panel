@@ -1,71 +1,53 @@
-using System.Net.Http.Json;
-using System.Net;
-using Newtonsoft.Json;
 using bp360_admin_panel.Helpers;
+using bp360_admin_panel.Services;
+using Newtonsoft.Json;
+using System.Net;
+using System.Net.Http.Json;
 
 namespace bp360_admin_panel;
 
 public partial class LoginPage : ContentPage
 {
-    private HttpClient client;
-    private HttpClientHandler handler;
     public LoginPage()
 	{
 		InitializeComponent();
-        handler = new HttpClientHandler
-        {
-            CookieContainer = new CookieContainer()
-        };
-
-        client = new HttpClient(handler);
-
-
 	}
 
     private async void LoginButton_Clicked(object sender, EventArgs e)
     {
-
-        var loginData = new { email = EmailEntry.Text, password = PasswordEntry.Text };
-        string url = "http://localhost:8000/api/login";
-
         if (string.IsNullOrEmpty(EmailEntry.Text) || string.IsNullOrEmpty(PasswordEntry.Text))
         {
             await DisplayAlertAsync("Hiba", "Hiányos mezők", "OK");
         }
 
+        var loginData = new { email = EmailEntry.Text, password = PasswordEntry.Text };
+
         try
         {
-            HttpResponseMessage response = await client.PostAsJsonAsync(url, loginData);
-            if (response.IsSuccessStatusCode)
+            HttpResponseMessage res = await ApiService.Client.PostAsJsonAsync("login", loginData);
+            if (res.IsSuccessStatusCode)
             {
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<AdminValidation>(jsonResponse);
+                var jsonRes = await res.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<AdminValidation>(jsonRes);
 
                 if (data.user.role != "admin")
                 {
                     await DisplayAlertAsync("Hiba", "Nincs admin jogosultságod", "OK");
                     return;
-                } else
-                {
-                    try
-                    {
-                        await SecureStorage.Default.SetAsync("token", data.token);
-                        await Shell.Current.GoToAsync("//adminpanel");
-                    }
-                    catch (Exception ex)
-                    {
-                        await DisplayAlertAsync("Hiba", $"Token validálási hiba: {ex.Message}", "OK");
-                    }
                 }
+
+                await SecureStorage.Default.SetAsync("token", data.token);
+                ApiService.SetAuthToken(data.token);
+                await Shell.Current.GoToAsync("//adminpanel");
             }
             else
             {
-                await DisplayAlertAsync("Hiba", $"HttpResponse hiba: {response.StatusCode}", "OK");
+                string errorBody = await res.Content.ReadAsStringAsync();
+                await DisplayAlertAsync("Hiba", $"Szerver hiba ({res.StatusCode}): {errorBody}", "OK");
             }
-
         } catch (Exception ex)
         {
-            await DisplayAlertAsync("Hiba", $"Hiba történt: {ex.Message}", "OK");
+            await DisplayAlertAsync("Hiba", $"Hálózati hiba: {ex.Message}", "OK");
         }
     }
 }

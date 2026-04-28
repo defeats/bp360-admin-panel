@@ -1,4 +1,5 @@
 using bp360_admin_panel.Models;
+using bp360_admin_panel.Services;
 using Newtonsoft.Json;
 using System;
 using System.Net;
@@ -8,106 +9,100 @@ namespace bp360_admin_panel;
 
 public partial class PlacesPage : ContentPage
 {
-    public HttpClient client;
-    public HttpClientHandler handler;
     public PlacesPage()
 	{
 		InitializeComponent();
-        handler = new HttpClientHandler
-        {
-            CookieContainer = new CookieContainer()
-        };
-        client = new HttpClient(handler);
-        client.DefaultRequestHeaders.Accept.Clear();
-        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        await LoadPlaces();
+    }
+
+    private async Task LoadPlaces()
+    {
         try
         {
-            EditPlace.IsEnabled = false;
-            DeletePlace.IsEnabled = false;
+            SetButtonsEnabled(false);
             PlacesListView.ItemsSource = null;
 
-            HttpResponseMessage res = await client.GetAsync("http://localhost:8000/api/places");
+            HttpResponseMessage res = await ApiService.Client.GetAsync("places");
+
             if (res.IsSuccessStatusCode)
             {
-                var jsonResponse = await res.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<PlaceResponse>(jsonResponse);
-                if (data != null)
-                {
-                    PlacesListView.ItemsSource = data.places;
-                } else
-                {
-                    await DisplayAlertAsync("Hiba", "Nem sikerült deszerializálni a választ.", "OK");
-                }
-            } else
+                var jsonRes = await res.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<PlaceResponse>(jsonRes);
+
+                if (data != null)   PlacesListView.ItemsSource = data.places;
+                else await DisplayAlertAsync("Hiba", "Nem sikerült deszerializálni a választ.", "OK");
+            }
+            else
             {
                 string errorBody = await res.Content.ReadAsStringAsync();
                 await DisplayAlertAsync("Hiba", $"Szerver hiba ({res.StatusCode}): {errorBody}", "OK");
             }
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             await DisplayAlertAsync("Hiba", "Hálózati hiba: " + ex.Message, "OK");
-        } finally
-        {
-            EditPlace.IsEnabled = true;
-            DeletePlace.IsEnabled = true;
         }
+        finally
+        {
+            SetButtonsEnabled(true);
+        }
+    }
+
+    private void SetButtonsEnabled(bool isEnabled)
+    {
+        EditPlace.IsEnabled = isEnabled;
+        DeletePlace.IsEnabled = isEnabled;
     }
 
     private async void EditPlace_Clicked(object sender, EventArgs e)
     {
-        Place selectedPlace = (Place)PlacesListView.SelectedItem;
-
-        if (selectedPlace != null)
-        {
-            var navParam = new Dictionary<string, object>
-            {
-                { "SelectedPlaceToEdit", selectedPlace }
-            };
-
-            await Shell.Current.GoToAsync("//editplace", navParam);
-        }
-        else
+        if (PlacesListView.SelectedItem is not Place selectedPlace)
         {
             await DisplayAlertAsync("Hiba", "Nincs kiválasztva hely", "OK");
+            return;
         }
+
+        var navParam = new Dictionary<string, object>
+        {
+            { "SelectedPlaceToEdit", selectedPlace }
+        };
+
+        await Shell.Current.GoToAsync("//editplace", navParam);
     }
 
     private async void DeletePlace_Clicked(object sender, EventArgs e)
     {
-        Place selectedPlace = (Place)PlacesListView.SelectedItem;
-        if (selectedPlace != null)
-        {
-            try
-            {
-                var token = await SecureStorage.Default.GetAsync("token");
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-                HttpResponseMessage res = await client.DeleteAsync($"http://localhost:8000/api/places/{selectedPlace.slug}");
-                if (res.IsSuccessStatusCode)
-                {
-                    await DisplayAlertAsync("Siker", "Hely sikeresen törölve.", "OK");
-                }
-                else
-                {
-                    string errorBody = await res.Content.ReadAsStringAsync();
-                    await DisplayAlertAsync("Hiba", $"Szerver hiba ({res.StatusCode}): {errorBody}", "OK");
-                }
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlertAsync("Hiba", "Hálózati hiba: " + ex.Message, "OK");
-            } finally
-            {
-                OnAppearing();
-            }
-        } else
+        if (PlacesListView.SelectedItem is not Place selectedPlace)
         {
             await DisplayAlertAsync("Hiba", "Nincs kiválasztva hely", "OK");
+            return;
         }
+
+        bool confirm = await DisplayAlertAsync("Megerősítés", $"Biztosan törlöd a következő helyet: {selectedPlace.name}?", "Igen", "Nem");
+        if (!confirm) return;
+
+        try
+        {
+            HttpResponseMessage res = await ApiService.Client.DeleteAsync($"places/{selectedPlace.slug}");
+            if (res.IsSuccessStatusCode)
+            {
+                await DisplayAlertAsync("Siker", "Hely sikeresen törölve.", "OK");
+                await LoadPlaces();
+            }
+            else
+            {
+                string errorBody = await res.Content.ReadAsStringAsync();
+                await DisplayAlertAsync("Hiba", $"Szerver hiba ({res.StatusCode}): {errorBody}", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlertAsync("Hiba", "Hálózati hiba: " + ex.Message, "OK");
+        } 
     }
 }
