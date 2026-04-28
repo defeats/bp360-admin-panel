@@ -28,27 +28,15 @@ public partial class DashboardPage : ContentPage
     {
         try
         {
-            HttpResponseMessage placesRes = await ApiService.Client.GetAsync("places");
-            HttpResponseMessage usersRes = await ApiService.Client.GetAsync("users");
+            var placeData = await ApiService.GetAsync<PlaceResponse>("places");
+            var userData = await ApiService.GetAsync<UserResponse>("users");
 
-            if (placesRes.IsSuccessStatusCode && usersRes.IsSuccessStatusCode)
+            if (placeData?.places != null && userData?.users != null)
             {
-                var placesJsonRes = await placesRes.Content.ReadAsStringAsync();
-                var placesData = JsonConvert.DeserializeObject<PlaceResponse>(placesJsonRes);
-
-                var usersJsonRes = await usersRes.Content.ReadAsStringAsync();
-                var usersData = JsonConvert.DeserializeObject<UserResponse>(usersJsonRes);
-
-                if (placesData?.places != null && usersData?.users != null)
-                {
-                    PlacesInDb.Text += placesData.places.Count.ToString();
-                    UsersInDb.Text += usersData.users.Count.ToString();
-                    //TODO: Reviews statistics
-                }
-
-                else PlacesInDb.Text += "0"; UsersInDb.Text += "0";
+                PlacesInDb.Text += placeData.places.Count.ToString();
+                UsersInDb.Text += userData.users.Count.ToString();
+                //TODO: Reviews statistics
             }
-
         }
         catch (Exception ex)
         {

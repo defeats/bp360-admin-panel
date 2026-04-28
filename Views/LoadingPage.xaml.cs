@@ -32,38 +32,25 @@ public partial class LoadingPage : ContentPage
             }
 
             ApiService.SetAuthToken(token);
-            HttpResponseMessage res = await ApiService.Client.GetAsync("checkTokenExpiryDate");
+            var data = await ApiService.GetAsync<UserTokenInfo>("checkTokenExpiryDate");
 
-            if (res.IsSuccessStatusCode)
+            if (data != null && !data.is_expired)
             {
-                var jsonRes = await res.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<UserTokenInfo>(jsonRes);
-
-                if (data != null && !data.is_expired)
-                {
-                    await Shell.Current.GoToAsync("//adminpanel");
-                }
-                else
-                {
-                    await HandleExpiredSession("A munkamenet lejárt.");
-                }
-            }
-            else if (res.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-            {
-                await HandleExpiredSession(null);
+                await Shell.Current.GoToAsync("//adminpanel");
             }
             else
             {
-                await HandleExpiredSession("Szerver hiba történt.");
+                await HandleExpiredSession("A munkamenet lejárt.");
             }
+        } 
+        catch (HttpRequestException ex) when (ex.Message.Contains("403") || ex.Message.Contains("401")) 
+        {
+            await HandleExpiredSession("Érvénytelen munkamenet.");
         }
         catch (Exception ex)
         {
             await Shell.Current.DisplayAlertAsync("Hiba", "Hálózati hiba: " + ex.Message, "OK");
-            if (Application.Current != null)
-            {
-                Application.Current.Quit();
-            }
+            Application.Current?.Quit();
         }
     }
 

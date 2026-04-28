@@ -28,5 +28,8 @@
     <TabBar>
         <ShellContent Title="Felhasználó hozzáadása" ContentTemplate="{DataTemplate local:AddUserPage}" Route="adduser" />
     </TabBar>
-    
+
+    <TabBar>
+        <ShellContent Title="Felhasználó szerkesztése" ContentTemplate="{DataTemplate local:EditUserPage}" Route="edituser" />
+    </TabBar>
 </Shell>

@@ -22,30 +22,17 @@ public partial class PlacesPage : ContentPage
 
     private async Task LoadPlaces()
     {
+        SetButtonsEnabled(false);
+        PlacesListView.ItemsSource = null;
+
         try
         {
-            SetButtonsEnabled(false);
-            PlacesListView.ItemsSource = null;
-
-            HttpResponseMessage res = await ApiService.Client.GetAsync("places");
-
-            if (res.IsSuccessStatusCode)
-            {
-                var jsonRes = await res.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<PlaceResponse>(jsonRes);
-
-                if (data != null)   PlacesListView.ItemsSource = data.places;
-                else await DisplayAlertAsync("Hiba", "Nem sikerült deszerializálni a választ.", "OK");
-            }
-            else
-            {
-                string errorBody = await res.Content.ReadAsStringAsync();
-                await DisplayAlertAsync("Hiba", $"Szerver hiba ({res.StatusCode}): {errorBody}", "OK");
-            }
+            var data = await ApiService.GetAsync<PlaceResponse>("places");
+            PlacesListView.ItemsSource = data.places;
         }
         catch (Exception ex)
         {
-            await DisplayAlertAsync("Hiba", "Hálózati hiba: " + ex.Message, "OK");
+            await DisplayAlertAsync("Hiba", ex.Message, "OK");
         }
         finally
         {
@@ -83,26 +70,6 @@ public partial class PlacesPage : ContentPage
             return;
         }
 
-        bool confirm = await DisplayAlertAsync("Megerősítés", $"Biztosan törlöd a következő helyet: {selectedPlace.name}?", "Igen", "Nem");
-        if (!confirm) return;
-
-        try
-        {
-            HttpResponseMessage res = await ApiService.Client.DeleteAsync($"places/{selectedPlace.slug}");
-            if (res.IsSuccessStatusCode)
-            {
-                await DisplayAlertAsync("Siker", "Hely sikeresen törölve.", "OK");
-                await LoadPlaces();
-            }
-            else
-            {
-                string errorBody = await res.Content.ReadAsStringAsync();
-                await DisplayAlertAsync("Hiba", $"Szerver hiba ({res.StatusCode}): {errorBody}", "OK");
-            }
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlertAsync("Hiba", "Hálózati hiba: " + ex.Message, "OK");
-        } 
+        await ApiService.DelAsync($"places/{selectedPlace.slug}", selectedPlace.name, LoadPlaces);
     }
 }

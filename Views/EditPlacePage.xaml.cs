@@ -32,13 +32,13 @@ public partial class EditPlacePage : ContentPage
         InitializeComponent();
     }
 
-    private async void SaveChanges_Clicked(object sender, EventArgs e)
+    private async void SavePlace_Clicked(object sender, EventArgs e)
     {
         if (PlaceData == null) return;
 
         try
         {
-            SaveChangesButton.IsEnabled = false;
+            SavePlace.IsEnabled = false;
 
             string json = JsonConvert.SerializeObject(PlaceData);
             StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -62,7 +62,7 @@ public partial class EditPlacePage : ContentPage
         } 
         finally
         {
-            SaveChangesButton.IsEnabled = true;
+            SavePlace.IsEnabled = true;
         }
     }
 

@@ -20,32 +20,18 @@ public partial class UsersPage : ContentPage
 
     private async Task LoadUsers()
     {
+        SetButtonsEnabled(false);
+        UsersListView.ItemsSource = null;
+
         try
         {
-            SetButtonsEnabled(false);
-            UsersListView.ItemsSource = null;
-
-            HttpResponseMessage res = await ApiService.Client.GetAsync("users");    
-            if (res.IsSuccessStatusCode)
-            {
-                var jsonRes = await res.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<UserResponse>(jsonRes);
-
-                if (data != null)   UsersListView.ItemsSource = data.users;
-                else await DisplayAlertAsync("Hiba", "Üres vagy érvénytelen adatobjektum", "OK");
-            }
-            else
-            {
-                string errorBody = await res.Content.ReadAsStringAsync();
-                await DisplayAlertAsync("Hiba", $"Szerver hiba ({res.StatusCode}): {errorBody}", "OK");
-            }
+            var data = await ApiService.GetAsync<UserResponse>("users");
+            UsersListView.ItemsSource = data.users;
         }
-
         catch (Exception ex)
         {
-            await DisplayAlertAsync("Hiba", "Hálózati hiba: " + ex.Message, "OK");
+            await DisplayAlertAsync("Hiba", ex.Message, "OK");
         }
-
         finally
         {
             SetButtonsEnabled(true);
@@ -59,14 +45,25 @@ public partial class UsersPage : ContentPage
         DeleteUser.IsEnabled = isEnabled;
     }
 
-    private void AddUser_Clicked(object sender, EventArgs e)
+    private async void AddUser_Clicked(object sender, EventArgs e)
     {
-        Shell.Current.GoToAsync("//adduser");
+        await Shell.Current.GoToAsync("//adduser");
     }
 
-    private void EditUser_Clicked(object sender, EventArgs e)
+    private async void EditUser_Clicked(object sender, EventArgs e)
     {
-        // TODO: edituser page
+        if (UsersListView.SelectedItem is not User selectedUser)
+        {
+            await DisplayAlertAsync("Hiba", "Nincs kiválasztva felhasználó", "OK");
+            return;
+        }
+
+        var navParam = new Dictionary<string, object>
+        {
+            { "SelectedUserToEdit", selectedUser }
+        };
+
+        await Shell.Current.GoToAsync("//edituser", navParam);
     }
 
     private async void DeleteUser_Clicked(object sender, EventArgs e)
@@ -77,25 +74,6 @@ public partial class UsersPage : ContentPage
             return;
         }
 
-        bool confirm = await DisplayAlertAsync("Megerősítés", $"Biztosan törlöd {selectedUser.name} felhasználót?", "Igen", "Nem");
-        if (!confirm) return;
-
-        try
-        {
-            HttpResponseMessage res = await ApiService.Client.DeleteAsync($"users/{selectedUser.id}");
-            if (res.IsSuccessStatusCode)
-            {
-                await DisplayAlertAsync("Siker", "Felhasználó sikeresen törölve.", "OK");
-                await LoadUsers();
-            } 
-            else
-            {
-                string errorBody = await res.Content.ReadAsStringAsync();
-                await DisplayAlertAsync("Hiba", $"Szerver hiba ({res.StatusCode}): {errorBody}", "OK");
-            }
-        } catch (Exception ex)
-        {
-            await DisplayAlertAsync("Hiba", "Hálózati hiba: " + ex.Message, "OK");
-        }
+        await ApiService.DelAsync($"users/{selectedUser.id}", selectedUser.name, LoadUsers);
     }
 }

@@ -101,9 +101,9 @@
 
             </Grid>
 
-            <Button x:Name="SaveChangesButton" 
+            <Button x:Name="SavePlace" 
                     Text="Mentés" 
-                    Clicked="SaveChanges_Clicked" 
+                    Clicked="SavePlace_Clicked" 
                     BackgroundColor="{StaticResource bp360Button}" 
                     TextColor="White" 
                     FontAttributes="Bold" 

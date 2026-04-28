@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="bp360_admin_panel.EditUserPage"
+             Title="">
+    <VerticalStackLayout Margin="100,100,100,0" Spacing="10">
+        <VerticalStackLayout Grid.Row="0" 
+                           HorizontalOptions="Start" 
+                           Spacing="10" 
+                           Padding="0,20">
+            <Button x:Name="GoBack" Text="&lt; Vissza" Clicked="GoBack_Clicked" BackgroundColor="{StaticResource bp360}" TextColor="White" />
+        </VerticalStackLayout>
+        <Label Text="{Binding id, StringFormat='Hely ID: {0}'}" 
+            FontAttributes="Bold" FontSize="18" TextColor="Grey" />
+
+        <Label Text="Felhasználónév" FontAttributes="Bold" />
+        <Entry Text="{Binding name}" Placeholder="Hely neve" />
+
+        <Label Text="E-mail cím" FontAttributes="Bold" />
+        <Entry Text="{Binding email}" Placeholder="hely-neve" />
+
+        <Label Text="Rang" FontAttributes="Bold" />
+        <Picker x:Name="RolePicker"
+        Title="Válassz rangot"
+        SelectedItem="{Binding role}">
+            <Picker.Items>
+                <x:String>user</x:String>
+                <x:String>owner</x:String>
+                <x:String>admin</x:String>
+            </Picker.Items>
+        </Picker>
+
+        <Button x:Name="SaveUser" Text="Mentés" Clicked="SaveUser_Clicked" BackgroundColor="{StaticResource bp360}" TextColor="White" />
+    </VerticalStackLayout>
+</ContentPage>
