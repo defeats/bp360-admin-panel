@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="bp360_admin_panel.EditPlacePage"
+             Title="">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <VerticalStackLayout Grid.Row="0" 
+                       HorizontalOptions="Start" 
+                       Spacing="10" 
+                       Padding="0,20">
+                <Button x:Name="GoBack" Text="&lt; Vissza" Clicked="GoBack_Clicked" BackgroundColor="{StaticResource bp360}" TextColor="White" />
+            </VerticalStackLayout>
+
+            <Label Text="{Binding id, StringFormat='Hely ID: {0}'}" 
+                   FontAttributes="Bold" FontSize="18" TextColor="Grey" />
+
+            <Label Text="Név" FontAttributes="Bold" />
+            <Entry Text="{Binding name}" Placeholder="Hely neve" />
+
+            <Label Text="Slug" FontAttributes="Bold" />
+            <Entry Text="{Binding slug}" Placeholder="hely-neve" />
+
+            <Label Text="Kategória ID" FontAttributes="Bold" />
+            <Entry Text="{Binding category_id}" />
+
+            <Label Text="Irányítószám" FontAttributes="Bold" />
+            <Entry Text="{Binding post_code}" />
+
+            <Label Text="Cím" FontAttributes="Bold" />
+            <Entry Text="{Binding address}" />
+
+            <Label Text="Telefonszám" FontAttributes="Bold" />
+            <Entry Text="{Binding phone}" Placeholder="+36301234567" />
+
+            <Label Text="Email" FontAttributes="Bold" />
+            <Entry Text="{Binding email}" Placeholder="info@hely.hu" />
+
+            <Label Text="Weboldal" FontAttributes="Bold" />
+            <Entry Text="{Binding website}" Placeholder="www.hely.hu" />
+
+            <Label Text="Leírás" FontAttributes="Bold" />
+            <Editor Text="{Binding description}" AutoSize="TextChanges" Placeholder="Hely leírása..." />
+
+            <Label Text="Státusz" FontAttributes="Bold" />
+            <Entry Text="{Binding status}" Placeholder="Pl.: aktív" />
+
+            <Label Text="Jellemzők" FontAttributes="Bold" FontSize="18" Margin="0,15,0,5" />
+
+            <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto, Auto, Auto, Auto" RowSpacing="15" ColumnSpacing="10">
+
+                <HorizontalStackLayout Grid.Row="0" Grid.Column="0" Spacing="10">
+                    <Switch IsToggled="{Binding outdoor_seating}" />
+                    <Label Text="Kinti hely" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Grid.Row="0" Grid.Column="1" Spacing="10">
+                    <Switch IsToggled="{Binding wifi}" />
+                    <Label Text="WiFi" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Grid.Row="1" Grid.Column="0" Spacing="10">
+                    <Switch IsToggled="{Binding pet_friendly}" />
+                    <Label Text="Állatbarát" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Grid.Row="1" Grid.Column="1" Spacing="10">
+                    <Switch IsToggled="{Binding family_friendly}" />
+                    <Label Text="Családbarát" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Grid.Row="2" Grid.Column="0" Spacing="10">
+                    <Switch IsToggled="{Binding card_payment}" />
+                    <Label Text="Bankkártya" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Grid.Row="2" Grid.Column="1" Spacing="10">
+                    <Switch IsToggled="{Binding free_parking}" />
+                    <Label Text="Ingyen parkolás" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Grid.Row="3" Grid.Column="0" Spacing="10">
+                    <Switch IsToggled="{Binding free_entry}" />
+                    <Label Text="Ingyenes belépés" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Grid.Row="3" Grid.Column="1" Spacing="10">
+                    <Switch IsToggled="{Binding photo_spot}" />
+                    <Label Text="Fotópont" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Grid.Row="4" Grid.Column="0" Spacing="10">
+                    <Switch IsToggled="{Binding accessible}" />
+                    <Label Text="Akadálymentes" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Grid.Row="4" Grid.Column="1" Spacing="10">
+                    <Switch IsToggled="{Binding student_discount}" />
+                    <Label Text="Diákkedvezmény" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+            </Grid>
+
+            <Button x:Name="SaveChangesButton" 
+                    Text="Mentés" 
+                    Clicked="SaveChanges_Clicked" 
+                    BackgroundColor="{StaticResource bp360Button}" 
+                    TextColor="White" 
+                    FontAttributes="Bold" 
+                    Margin="0,30,0,20" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

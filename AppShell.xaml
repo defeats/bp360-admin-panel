@@ -6,20 +6,26 @@
     xmlns:local="clr-namespace:bp360_admin_panel"
     Title="bp360_admin_panel">
 
-    <ShellContent
-        Title="Loading"
-        ContentTemplate="{DataTemplate local:LoadingPage}"
-        Route="loading" />
-    
-    <ShellContent
-        Title="Login"
-        ContentTemplate="{DataTemplate local:LoginPage}"
-        Route="login" />
-
-    <TabBar Route="adminpanel">
-        <ShellContent Title="Dashboard" ContentTemplate="{DataTemplate local:DashboardPage}" />
-        <ShellContent Title="Places" ContentTemplate="{DataTemplate local:PlacesPage}" />
-        <ShellContent Title="Users" ContentTemplate="{DataTemplate local:UsersPage}" />
+    <TabBar>
+        <ShellContent Title="Betöltés" ContentTemplate="{DataTemplate local:LoadingPage}" Route="loading" />
     </TabBar>
 
+    <TabBar>
+        <ShellContent Title="Bejelentkezés" ContentTemplate="{DataTemplate local:LoginPage}" Route="login" />
+    </TabBar>
+
+    <TabBar Route="adminpanel">
+        <ShellContent Title="Adatok" ContentTemplate="{DataTemplate local:DashboardPage}" />
+        <ShellContent Title="Helyek" ContentTemplate="{DataTemplate local:PlacesPage}" />
+        <ShellContent Title="Felhasználók" ContentTemplate="{DataTemplate local:UsersPage}" />
+    </TabBar>
+
+    <TabBar>
+        <ShellContent Title="Hely szerkesztése" ContentTemplate="{DataTemplate local:EditPlacePage}" Route="editplace" />
+    </TabBar>
+
+    <TabBar>
+        <ShellContent Title="Felhasználó hozzáadása" ContentTemplate="{DataTemplate local:AddUserPage}" Route="adduser" />
+    </TabBar>
+    
 </Shell>

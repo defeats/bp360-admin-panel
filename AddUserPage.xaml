@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="bp360_admin_panel.AddUserPage"
+             Title="">
+    <VerticalStackLayout Margin="100,100,100,0" Spacing="10">
+        <VerticalStackLayout Grid.Row="0" 
+           HorizontalOptions="Start" 
+           Spacing="10" 
+           Padding="0,20">
+            <Button x:Name="GoBack" Text="&lt; Vissza" Clicked="GoBack_Clicked" BackgroundColor="{StaticResource bp360}" TextColor="White" />
+        </VerticalStackLayout>
+        <Label Text="Felhasználónév" FontAttributes="Bold" />
+        <Entry x:Name="name" />
+
+        <Label Text="E-mail cím" FontAttributes="Bold" />
+        <Entry x:Name="email" />
+
+        <Label Text="Jelszó" FontAttributes="Bold" />
+        <Entry x:Name="password" />
+
+        <Button x:Name="CreateUser" Text="Létrehozás" Clicked="CreateUser_Clicked" BackgroundColor="{StaticResource bp360}" TextColor="White" />
+    </VerticalStackLayout>
+</ContentPage>

@@ -15,8 +15,10 @@ namespace bp360_admin_panel
         public int category_id { get; set; }
         public string name { get; set; }
         public string slug { get; set; }
+        public int post_code { get; set; }
+        public string address { get; set; }
         public string phone { get; set; }
-        public string email { get; set; }
+        public string? email { get; set; }
         public string? website { get; set; }
         public string description { get; set; }
         public bool outdoor_seating { get; set; }
@@ -30,6 +32,6 @@ namespace bp360_admin_panel
         public bool accessible { get; set; }
         public bool student_discount { get; set; }
         public string status { get; set; }
-        public string price_range { get; set; }
+        public int clicks { get; set; }
     }
 }

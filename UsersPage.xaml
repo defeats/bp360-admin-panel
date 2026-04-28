@@ -3,16 +3,51 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="bp360_admin_panel.UsersPage"
              Title="">
-    <VerticalStackLayout>
-        <VerticalStackLayout
-            Padding="0,20"
-            Spacing="25">
-            <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
-                <Button Text="Felhasználók lekérése" Clicked="GetUsers_Clicked" />
-                <Button Text="Felhasználó hozzáadása" Clicked="AddUser_Clicked" />
-                <Button Text="Felhasználó frissítése" Clicked="UpdateUser_Clicked"/>
-                <Button Text="Felhasználó törlése" Clicked="DeleteUser_Clicked"/>
-            </HorizontalStackLayout>
+    <Grid RowDefinitions="Auto, Auto, *">
+
+        <VerticalStackLayout Grid.Row="0" 
+                           HorizontalOptions="Center" 
+                           Spacing="10" 
+                           Padding="0,20">
+            <Button x:Name="AddUser" Text="Hozzáadás" Clicked="AddUser_Clicked" BackgroundColor="{StaticResource bp360Button}" TextColor="White" FontAttributes="Bold"/>
+            <Button x:Name="EditUser" Text="Módosítás" Clicked="EditUser_Clicked" BackgroundColor="{StaticResource bp360Button}" TextColor="White" FontAttributes="Bold"/>
+            <Button x:Name="DeleteUser" Text="Törlés" Clicked="DeleteUser_Clicked" BackgroundColor="{StaticResource bp360Button}" TextColor="White" FontAttributes="Bold"/>
         </VerticalStackLayout>
-    </VerticalStackLayout>
+
+        <Label Grid.Row="1" 
+           Text="Felhasználók listája" 
+           FontSize="20" 
+           HorizontalOptions="Center" 
+           Margin="0,0,0,10" />
+
+        <CollectionView Grid.Row="2" x:Name="UsersListView" SelectionMode="Single">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="5" />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border
+                    Padding="15"
+                    Stroke="DarkOrange"
+                    StrokeThickness="0.3"
+                    StrokeShape="RoundRectangle 10">
+                        <VerticalStackLayout>
+                            <Label>
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{} ID: {0} | Name: {1} |  E-mail: {2} | Role: {3}">
+                                        <Binding Path="id" />
+                                        <Binding Path="name" />
+                                        <Binding Path="email" />
+                                        <Binding Path="role" />
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </Grid>
 </ContentPage>

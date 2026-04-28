@@ -10,8 +10,7 @@
                                HorizontalOptions="Center" 
                                Spacing="10" 
                                Padding="0,20">
-            <Button x:Name="AddPlace" Text="Hozzáadás" Clicked="AddPlace_Clicked" BackgroundColor="{StaticResource bp360Button}" TextColor="White" FontAttributes="Bold"/>
-            <Button x:Name="UpdatePlace" Text="Frissítés" Clicked="UpdatePlace_Clicked" BackgroundColor="{StaticResource bp360Button}" TextColor="White" FontAttributes="Bold"/>
+            <Button x:Name="EditPlace" Text="Módosítás" Clicked="EditPlace_Clicked" BackgroundColor="{StaticResource bp360Button}" TextColor="White" FontAttributes="Bold"/>
             <Button x:Name="DeletePlace" Text="Törlés" Clicked="DeletePlace_Clicked" BackgroundColor="{StaticResource bp360Button}" TextColor="White" FontAttributes="Bold"/>
         </VerticalStackLayout>
 
@@ -36,10 +35,11 @@
                         <VerticalStackLayout>
                             <Label>
                                 <Label.Text>
-                                    <MultiBinding StringFormat="{}{0} | ID: {1} | slug: {2}">
+                                    <MultiBinding StringFormat="{}{0} | ID: {1} | slug: {2} | {3} views">
                                         <Binding Path="name" />
                                         <Binding Path="id" />
                                         <Binding Path="slug" />
+                                        <Binding Path="clicks" />
                                     </MultiBinding>
                                 </Label.Text>
                             </Label>
