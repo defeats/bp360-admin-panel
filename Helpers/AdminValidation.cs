@@ -1,8 +1,9 @@
-﻿using System;
+﻿using bp360_admin_panel.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace bp360_admin_panel
+namespace bp360_admin_panel.Helpers
 {
     public class AdminValidation
     {
