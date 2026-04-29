@@ -58,8 +58,7 @@ public partial class LoadingPage : ContentPage
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlertAsync("Hiba", "Hálózati hiba: " + ex.Message, "OK");
-            Application.Current?.Quit();
+            await HandleExpiredSession(ex.Message);
         }
     }
 

@@ -32,6 +32,7 @@
 
         <Button 
             Text="Bejelentkezés" 
+            x:Name="LoginButton"
             Clicked="LoginButton_Clicked" 
             WidthRequest="300" 
             BackgroundColor="{StaticResource bp360Button}"

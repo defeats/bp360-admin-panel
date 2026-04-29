@@ -24,6 +24,7 @@ public partial class LoginPage : ContentPage
 
         try
         {
+            LoginButton.IsEnabled = false;
             HttpResponseMessage res = await ApiService.Client.PostAsJsonAsync("login", loginData);
             if (res.IsSuccessStatusCode)
             {
@@ -33,6 +34,7 @@ public partial class LoginPage : ContentPage
                 if (data.user.role != "admin")
                 {
                     await DisplayAlertAsync("Hiba", "Nincs admin jogosultságod", "OK");
+                    SecureStorage.Default.Remove("token");
                     return;
                 }
 
@@ -48,6 +50,10 @@ public partial class LoginPage : ContentPage
         } catch (Exception ex)
         {
             await DisplayAlertAsync("Hiba", $"Hálózati hiba: {ex.Message}", "OK");
+        }
+        finally
+        {
+            LoginButton.IsEnabled = true;
         }
     }
 }
