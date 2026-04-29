@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="bp360_admin_panel.EditReviewPage"
+             Title="">
+    <VerticalStackLayout Margin="100,100,100,0" Spacing="10">
+        <VerticalStackLayout Grid.Row="0" 
+                       HorizontalOptions="Start" 
+                       Spacing="10" 
+                       Padding="0,20">
+            <Button x:Name="GoBack" Text="&lt; Vissza" Clicked="GoBack_Clicked" BackgroundColor="{StaticResource bp360}" TextColor="White" />
+        </VerticalStackLayout>
+        <Label>
+            <Label.Text>
+                <MultiBinding StringFormat="{}ID: {0} | Hely ID: {1} | Felhasználó ID: {2}">
+                    <Binding Path="id" />
+                    <Binding Path="place_id" />
+                    <Binding Path="user_id" />
+                </MultiBinding>
+            </Label.Text>
+        </Label>
+
+        <Label Text="{Binding star, StringFormat='Értékelés: {0}'}"/>
+        <Label Text="Ha módosítani szeretnéd:" />
+        <Entry x:Name="StarEntry"
+        Text="{Binding star}"
+        Placeholder="1-5"
+        Keyboard="Numeric"
+        MaxLength="1"
+        TextChanged="StarEntry_TextChanged" />
+
+        <Label Text="Vélemény" FontAttributes="Bold" />
+        <Entry Text="{Binding comment}" />
+
+        <Button x:Name="SaveReview" Text="Mentés" Clicked="SaveReview_Clicked" BackgroundColor="{StaticResource bp360}" TextColor="White" />
+    </VerticalStackLayout>
+</ContentPage>

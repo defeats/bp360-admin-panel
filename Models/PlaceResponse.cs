@@ -33,5 +33,8 @@ namespace bp360_admin_panel.Models
         public bool student_discount { get; set; }
         public string status { get; set; }
         public int clicks { get; set; }
+        public DateTime created_at { get; set; }
+        public DateTime? updated_at { get; set; }
+        public DateTime? deleted_at { get; set; }
     }
 }

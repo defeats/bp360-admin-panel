@@ -17,6 +17,7 @@
     <TabBar Route="adminpanel">
         <ShellContent Title="Adatok" ContentTemplate="{DataTemplate local:DashboardPage}" />
         <ShellContent Title="Helyek" ContentTemplate="{DataTemplate local:PlacesPage}" />
+        <ShellContent Title="Visszaigazolandó helyek" ContentTemplate="{DataTemplate local:PendingPlacesPage}" />
         <ShellContent Title="Felhasználók" ContentTemplate="{DataTemplate local:UsersPage}" />
         <ShellContent Title="Vélemények" ContentTemplate="{DataTemplate local:ReviewsPage}" />
     </TabBar>
@@ -31,5 +32,9 @@
 
     <TabBar>
         <ShellContent Title="Felhasználó szerkesztése" ContentTemplate="{DataTemplate local:EditUserPage}" Route="edituser" />
+    </TabBar>
+
+    <TabBar>
+        <ShellContent Title="Vélemény szerkesztése" ContentTemplate="{DataTemplate local:EditReviewPage}" Route="editreview" />
     </TabBar>
 </Shell>

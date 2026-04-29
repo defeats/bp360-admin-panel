@@ -39,27 +39,13 @@ public partial class EditPlacePage : ContentPage
         try
         {
             SavePlace.IsEnabled = false;
+            bool isSuccess = await ApiService.PutAsync($"places/{PlaceData.slug}", PlaceData);
 
-            string json = JsonConvert.SerializeObject(PlaceData);
-            StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            HttpResponseMessage res = await ApiService.Client.PutAsync($"places/{PlaceData.slug}", content);
-
-            if (res.IsSuccessStatusCode)
+            if (isSuccess)
             {
-                await DisplayAlertAsync("Siker", "A hely adatai frissítve lettek", "OK");
                 await Shell.Current.GoToAsync("//adminpanel");
-            } 
-            else
-            {
-                string errorBody = await res.Content.ReadAsStringAsync();
-                await DisplayAlertAsync("Hiba", $"Szerver hiba ({res.StatusCode}): {errorBody}", "OK");
             }
-        } 
-        catch (Exception ex)
-        {
-            await DisplayAlertAsync("Hiba", "Hálózati hiba: " + ex.Message, "OK");
-        } 
+        }
         finally
         {
             SavePlace.IsEnabled = true;

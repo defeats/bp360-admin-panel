@@ -32,15 +32,24 @@ public partial class LoadingPage : ContentPage
             }
 
             ApiService.SetAuthToken(token);
-            var data = await ApiService.GetAsync<UserTokenInfo>("checkTokenExpiryDate");
+            var data = await ApiService.GetAsync<TokenCheckResponse>("checkTokenExpiryDate");
 
-            if (data != null && !data.is_expired)
+            if (data != null && data.has_tokens && data.tokens?.Count > 0)
             {
-                await Shell.Current.GoToAsync("//adminpanel");
+                var activeToken = data.tokens[0];
+
+                if (!activeToken.is_expired)
+                {
+                    await Shell.Current.GoToAsync("//adminpanel");
+                }
+                else
+                {
+                    await HandleExpiredSession("A munkamenet lejárt");
+                }
             }
             else
             {
-                await HandleExpiredSession("A munkamenet lejárt.");
+                await HandleExpiredSession("Törölt vagy hibás token");
             }
         } 
         catch (HttpRequestException ex) when (ex.Message.Contains("403") || ex.Message.Contains("401")) 

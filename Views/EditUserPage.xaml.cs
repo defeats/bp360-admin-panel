@@ -33,26 +33,12 @@ public partial class EditUserPage : ContentPage
         try
         {
             SaveUser.IsEnabled = false;
+            bool isSuccess = await ApiService.PutAsync($"users/{UserData.id}", UserData);
 
-            string json = JsonConvert.SerializeObject(UserData);
-            StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            HttpResponseMessage res = await ApiService.Client.PutAsync($"users/{UserData.id}", content);
-
-            if (res.IsSuccessStatusCode)
+            if (isSuccess)
             {
-                await DisplayAlertAsync("Siker", "A felhasználó adatai frissítve lettek", "OK");
                 await Shell.Current.GoToAsync("//adminpanel");
             }
-            else
-            {
-                string errorBody = await res.Content.ReadAsStringAsync();
-                await DisplayAlertAsync("Hiba", $"Szerver hiba ({res.StatusCode}): {errorBody}", "OK");
-            }
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlertAsync("Hiba", "Hálózati hiba: " + ex.Message, "OK");
         }
         finally
         {

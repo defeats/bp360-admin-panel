@@ -55,6 +55,33 @@ namespace bp360_admin_panel.Services
             return result;
         }
 
+        public static async Task<bool> PutAsync<T>(string endpoint, T data)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(data);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var res = await Client.PutAsync(endpoint, content);
+
+                if (res.IsSuccessStatusCode)
+                {
+                    await Shell.Current.DisplayAlertAsync("Siker", "Sikeres frissítés", "OK");
+                    return res.IsSuccessStatusCode;
+                }
+                else
+                {
+                    string error = await res.Content.ReadAsStringAsync();
+                    await Shell.Current.DisplayAlertAsync("Hiba", $"Szerver hiba ({res.StatusCode}): {error}", "OK");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlertAsync("Hiba", "Hálózati hiba: " + ex.Message, "OK");
+                return false;
+            }
+        }
+
         public static async Task DelAsync(string endpoint, string itemName, Func<Task> onSuccess)
         {
             bool confirm = await Shell.Current.DisplayAlertAsync("Megerősítés", $"Biztosan törlöd a következőt: {itemName}?", "Igen", "Nem");

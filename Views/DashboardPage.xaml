@@ -6,16 +6,38 @@
 
     <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
         <Label Text="Üdv az Admin felületen!" FontAttributes="Bold" FontSize="18" />
-        <Label x:Name="UsersInDb"/>
-        <Label x:Name="PlacesInDb"/>
-        <Label x:Name="ReviewsInDb"/>
+        <Label x:Name="TokenExpiryDate" FontAttributes="Bold" TextColor="#FF7F7F"/>
+        <Label x:Name="LoadingData" />
+        <Label x:Name="UsersInDb" />
+        <Label x:Name="PlacesInDb" />
+        <Label x:Name="ReviewsInDb" />
 
+        <Label x:Name="CategoryLabel" Text="Kategória azonosítók" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource bp360}"/>
+        <Grid ColumnDefinitions="40, 150" Padding="5,2">
+            <Label Grid.Column="0" Text="ID" FontSize="12" FontAttributes="Bold" TextColor="Silver"/>
+            <Label Grid.Column="1" Text="NÉV" FontSize="12" FontAttributes="Bold" TextColor="Silver"/>
+        </Grid>
+
+        <BoxView HeightRequest="1" Color="#EEEEEE" Margin="0,2"/>
+
+        <VerticalStackLayout x:Name="CategoryContainer" 
+                         BindableLayout.ItemsSource="{Binding HardcodedCategories}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="40, 150" Padding="5,1">
+                        <Label Grid.Column="0" Text="{Binding id}" FontSize="13" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="{Binding name}" FontSize="13" VerticalOptions="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </VerticalStackLayout>
+        
         <Button x:Name="Logout" 
             Text="Kijelentkezés" 
             Clicked="Logout_Clicked" 
             BackgroundColor="{StaticResource bp360Button}" 
             TextColor="White"
             FontAttributes="Bold"
-            Margin="0,10,0,0"/>
+            Margin="0,10,0,0" />
     </VerticalStackLayout>
 </ContentPage>

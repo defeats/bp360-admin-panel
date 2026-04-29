@@ -42,9 +42,20 @@ public partial class ReviewsPage : ContentPage
         DeleteReview.IsEnabled = isEnabled;
     }
 
-    private void EditReview_Clicked(object sender, EventArgs e)
+    private async void EditReview_Clicked(object sender, EventArgs e)
     {
+        if (ReviewsListView.SelectedItem is not Review selectedReview)
+        {
+            await DisplayAlertAsync("Hiba", "Nincs kiválasztva vélemény", "OK");
+            return;
+        }
 
+        var navParam = new Dictionary<string, object>
+        {
+            { "SelectedReviewToEdit", selectedReview }
+        };
+
+        await Shell.Current.GoToAsync("//editreview", navParam);
     }
 
     private async void DeleteReview_Clicked(object sender, EventArgs e)

@@ -35,10 +35,10 @@
                         <VerticalStackLayout>
                             <Label>
                                 <Label.Text>
-                                    <MultiBinding StringFormat="{}ID: {0} | Felhasználó ID: {1} | Hely ID: {2} | {3} csillag">
+                                    <MultiBinding StringFormat="{}ID: {0} | Hely ID: {1} | Felhasználó ID: {2} | {3} csillag">
                                         <Binding Path="id" />
-                                        <Binding Path="user_id" />
                                         <Binding Path="place_id" />
+                                        <Binding Path="user_id" />
                                         <Binding Path="star" />
                                     </MultiBinding>
                                 </Label.Text>

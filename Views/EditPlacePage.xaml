@@ -42,9 +42,6 @@
             <Label Text="Leírás" FontAttributes="Bold" />
             <Editor Text="{Binding description}" AutoSize="TextChanges" Placeholder="Hely leírása..." />
 
-            <Label Text="Státusz" FontAttributes="Bold" />
-            <Entry Text="{Binding status}" Placeholder="Pl.: aktív" />
-
             <Label Text="Jellemzők" FontAttributes="Bold" FontSize="18" Margin="0,15,0,5" />
 
             <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto, Auto, Auto, Auto" RowSpacing="15" ColumnSpacing="10">
